@@ -1,6 +1,10 @@
 terraform {
   required_providers {
     aws = "~> 6.0"
+    tls = {
+      source  = "hashicorp/tls"
+      version = ">= 4.0"
+    }
   }
   backend "s3" {
     key    = "iac/infastructure/terraform.tfstate"
