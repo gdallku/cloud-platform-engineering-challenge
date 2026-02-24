@@ -96,6 +96,6 @@ resource "aws_iam_openid_connect_provider" "cluster" {
   url             = aws_eks_cluster.this.identity[0].oidc[0].issuer
 
   tags = merge(local.common_tags, {
-    Name = "${var.cluster_name}-oidc-provider"
+    Name = "${var.cluster_name}-oidc-provider-${var.environment}"
   })
 }

@@ -6,7 +6,7 @@
 ##################################################################################################
 
 resource "aws_launch_template" "bootstrap" {
-  name_prefix = "${var.cluster_name}-bootstrap-"
+  name_prefix = "${var.cluster_name}-bootstrap-${var.environment}-"
 
   vpc_security_group_ids = [
     aws_eks_cluster.this.vpc_config[0].cluster_security_group_id,
@@ -22,12 +22,12 @@ resource "aws_launch_template" "bootstrap" {
   tag_specifications {
     resource_type = "instance"
     tags = merge(local.common_tags, {
-      Name = "${var.cluster_name}-bootstrap-node"
+      Name = "${var.cluster_name}-bootstrap-${var.environment}-node"
     })
   }
 
   tags = merge(local.common_tags, {
-    Name = "${var.cluster_name}-bootstrap-lt"
+    Name = "${var.cluster_name}-bootstrap-${var.environment}-lt"
   })
 
   lifecycle {
@@ -44,7 +44,7 @@ resource "aws_launch_template" "bootstrap" {
 
 resource "aws_eks_node_group" "bootstrap" {
   cluster_name    = aws_eks_cluster.this.name
-  node_group_name = "${var.cluster_name}-bootstrap"
+  node_group_name = "${var.cluster_name}-bootstrap-${var.environment}"
   node_role_arn   = aws_iam_role.node.arn
   subnet_ids      = var.private_subnet_ids
 
@@ -71,7 +71,7 @@ resource "aws_eks_node_group" "bootstrap" {
   }
 
   tags = merge(local.common_tags, {
-    Name = "${var.cluster_name}-bootstrap-node-group"
+    Name = "${var.cluster_name}-bootstrap-${var.environment}-node-group"
   })
 
   depends_on = [

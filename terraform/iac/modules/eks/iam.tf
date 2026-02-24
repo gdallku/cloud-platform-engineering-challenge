@@ -19,12 +19,12 @@ data "aws_iam_policy_document" "cluster_assume_role" {
 }
 
 resource "aws_iam_role" "cluster" {
-  name = "${var.cluster_name}-cluster-role"
+  name = "${var.cluster_name}-cluster-role-${var.environment}"
 
   assume_role_policy = data.aws_iam_policy_document.cluster_assume_role.json
 
   tags = merge(local.common_tags, {
-    Name = "${var.cluster_name}-cluster-role"
+    Name = "${var.cluster_name}-cluster-role-${var.environment}"
   })
 }
 
@@ -54,12 +54,12 @@ data "aws_iam_policy_document" "node_assume_role" {
 }
 
 resource "aws_iam_role" "node" {
-  name = "${var.cluster_name}-node-role"
+  name = "${var.cluster_name}-node-role-${var.environment}"
 
   assume_role_policy = data.aws_iam_policy_document.node_assume_role.json
 
   tags = merge(local.common_tags, {
-    Name = "${var.cluster_name}-node-role"
+    Name = "${var.cluster_name}-node-role-${var.environment}"
   })
 }
 

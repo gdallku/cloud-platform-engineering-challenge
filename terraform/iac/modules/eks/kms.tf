@@ -65,17 +65,17 @@ data "aws_iam_policy_document" "kms" {
 }
 
 resource "aws_kms_key" "cluster" {
-  description             = "EKS cluster ${var.cluster_name} — secrets and log encryption"
+  description             = "EKS cluster ${var.cluster_name}-${var.environment} — secrets and log encryption"
   deletion_window_in_days = 30
   enable_key_rotation     = true
   policy                  = data.aws_iam_policy_document.kms.json
 
   tags = merge(local.common_tags, {
-    Name = "${var.cluster_name}-eks-kms"
+    Name = "${var.cluster_name}-eks-kms-${var.environment}"
   })
 }
 
 resource "aws_kms_alias" "cluster" {
-  name          = "alias/eks/${var.cluster_name}"
+  name          = "alias/eks/${var.cluster_name}-${var.environment}"
   target_key_id = aws_kms_key.cluster.key_id
 }
